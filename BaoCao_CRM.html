@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo phân tích CRM Viet Huong — Khách hàng &amp; Đơn hàng</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  body { font-family: 'Segoe UI', 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  .chart-box { position: relative; height: 320px; }
+  .chart-box-tall { position: relative; height: 420px; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-lg sm:text-xl font-bold text-slate-900">Báo cáo phân tích CRM Viet Huong - KHACH HANG & DON HANG</h1>
+      <p class="text-xs text-slate-500">Nguồn: CRM_Account_02.07.2026_10.44.30_920.xlsx · CRM_Saleorder_02.07.2026_10.40.58_376.xlsx</p>
+    </div>
+    <nav class="flex flex-wrap gap-1 text-sm">
+      <a href="#tong-quan" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-600 font-medium">Tổng quan</a>
+      <a href="#khach-hang" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-600 font-medium">Khách hàng</a>
+      <a href="#don-hang" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-600 font-medium">Đơn hàng</a>
+      <a href="#dai-ly" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-600 font-medium">Đại lý</a>
+      <a href="#quay-lai" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-600 font-medium">Quay lại</a>
+      <a href="#insight" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-600 font-medium">Insight</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+  <!-- ===================== TỔNG QUAN ===================== -->
+  <section id="tong-quan">
+    <h2 class="text-2xl font-bold text-slate-900 mb-1">1. Tổng quan</h2>
+    <p class="text-slate-500 mb-6">Bức tranh chung về dữ liệu khách hàng &amp; đơn hàng đang có trong CRM.</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold">Tổng khách hàng</p>
+        <p class="text-3xl font-bold text-slate-900 mt-1">3.260</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold">Tổng đơn hàng</p>
+        <p class="text-3xl font-bold text-slate-900 mt-1">4.952</p>
+        <p class="text-xs text-slate-400 mt-1">446 đơn giá trị 0</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold">Tổng doanh số</p>
+        <p class="text-3xl font-bold text-emerald-600 mt-1">75,01 tỷ đ</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold">Tỷ lệ đã ghi doanh số</p>
+        <p class="text-3xl font-bold text-slate-900 mt-1">82.9%</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KHÁCH HÀNG ===================== -->
+  <section id="khach-hang">
+    <h2 class="text-2xl font-bold text-slate-900 mb-1">2. Khách hàng</h2>
+    <p class="text-slate-500 mb-6">Phân bố khách hàng theo loại, lĩnh vực, khu vực và người phụ trách.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Phân bố theo Loại khách hàng</h3>
+        <div class="chart-box"><canvas id="chartDistLoai"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>(Không xác định)</b> chiếm nhóm lớn nhất với 2.115 khách hàng.
+          Phần lớn khách hàng (2.115 khách)
+          chưa được gắn nhãn loại trong CRM — nên bổ sung để phân tích chính xác hơn.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Tỷ lệ Khách lẻ / Sỉ (Đại lý)</h3>
+        <div class="chart-box"><canvas id="chartLeSi"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> Trong số khách hàng phân loại được (dựa trên "Loại khách hàng" và tiền tố tên), tỷ lệ là
+          <b>33.9% Khách lẻ</b> : <b>66.1% Sỉ (Đại lý)</b>
+          (497 : 970 khách hàng). Sỉ/Đại lý chiếm ưu thế rõ rệt.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 10 Lĩnh vực khách hàng</h3>
+        <div class="chart-box"><canvas id="chartLinhVuc"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>(Không xác định)</b> là lĩnh vực phổ biến nhất trong danh sách khách hàng đã gắn nhãn lĩnh vực.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 15 Tỉnh/Thành phố (số lượng khách hàng)</h3>
+        <div class="chart-box"><canvas id="chartTinhKh"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>Đà Nẵng</b> có số lượng khách hàng đăng ký nhiều nhất trong CRM.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 lg:col-span-2">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 15 nhân viên quản lý nhiều khách hàng nhất</h3>
+        <div class="chart-box-tall"><canvas id="chartOwner"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>Nguyễn Quốc Dũng</b> đang quản lý nhiều khách hàng nhất (228 khách) — xem thêm phần
+          "Kết hợp dữ liệu" trong notebook để biết nhân viên quản lý nhiều khách hàng có tương ứng tạo ra nhiều doanh số hay không.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ĐƠN HÀNG ===================== -->
+  <section id="don-hang">
+    <h2 class="text-2xl font-bold text-slate-900 mb-1">3. Đơn hàng bán</h2>
+    <p class="text-slate-500 mb-6">Doanh số, trạng thái xử lý đơn hàng và hiệu suất theo đơn vị / nhân viên / khu vực.
+      <span class="italic">(446 đơn giá trị 0 — thường là đơn nháp/hủy — đã được loại khỏi các phân tích doanh số.)</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Trung bình / đơn</p>
+        <p class="text-xl font-bold text-slate-900">17 triệu đ</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Trung vị / đơn</p>
+        <p class="text-xl font-bold text-slate-900">4 triệu đ</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Đơn lớn nhất</p>
+        <p class="text-xl font-bold text-slate-900">2,59 tỷ đ</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Tháng doanh số cao nhất</p>
+        <p class="text-xl font-bold text-slate-900">2026-01</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Doanh số &amp; số lượng đơn hàng theo tháng</h3>
+        <div class="chart-box-tall"><canvas id="chartMonthly"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> Tháng <b>2026-01</b> ghi nhận doanh số cao nhất với 7,36 tỷ đ.
+          Di chuột vào biểu đồ để xem chi tiết số đơn và doanh số từng tháng.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3 text-sm">Tình trạng ghi doanh số</h3>
+          <div class="chart-box"><canvas id="chartGhi"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3 text-sm">Tình trạng giao hàng</h3>
+          <div class="chart-box"><canvas id="chartGiao"></canvas></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3 text-sm">Tình trạng thanh toán</h3>
+          <div class="chart-box"><canvas id="chartThanhToan"></canvas></div>
+        </div>
+      </div>
+      <p class="text-sm text-slate-600 -mt-2 leading-relaxed">
+        <b><i><u>Insight:</u></i></b> 82.9% đơn đã được ghi nhận doanh số; 3.415 đơn đã giao hàng;
+        nhưng vẫn còn 3.933 đơn <b>chưa thanh toán</b> — đáng chú ý cho việc theo dõi công nợ.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3">Top đơn vị theo doanh số</h3>
+          <div class="chart-box-tall"><canvas id="chartDviDoanhSo"></canvas></div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            <b><i><u>Insight:</u></i></b> <b>PKD nhà máy Viet Huong</b> dẫn đầu doanh số với 16,86 tỷ đ.
+          </p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3">Top 15 nhân viên kinh doanh theo doanh số</h3>
+          <div class="chart-box-tall"><canvas id="chartNvDoanhSo"></canvas></div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            <b><i><u>Insight:</u></i></b> <b>Tạ Công Thức</b> là nhân viên kinh doanh tạo doanh số cao nhất (8,77 tỷ đ).
+          </p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3">Top 15 Tỉnh/Thành phố theo doanh số</h3>
+          <div class="chart-box-tall"><canvas id="chartTinhSo"></canvas></div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            <b><i><u>Insight:</u></i></b> <b>Đà Nẵng</b> đóng góp doanh số lớn nhất, đạt 14,92 tỷ đ.
+          </p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-800 mb-3">Top 20 Phường/Xã theo doanh số</h3>
+          <div class="chart-box-tall"><canvas id="chartXaSo"></canvas></div>
+          <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+            <b><i><u>Insight:</u></i></b> <b>Phường Hòa Xuân</b> dẫn đầu doanh số cấp Phường/Xã (2,20 tỷ đ).
+            Lưu ý: chỉ ~43% đơn hàng có thông tin Phường/Xã.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ĐẠI LÝ THEO KHU VỰC ===================== -->
+  <section id="dai-ly">
+    <h2 class="text-2xl font-bold text-slate-900 mb-1">4. Đại lý theo khu vực</h2>
+    <p class="text-slate-500 mb-6">
+      Đại lý (nhận diện qua tiền tố tên "ĐL"/"Đại lý" trong Diễn giải) chiếm 61.1% tổng số đơn hàng
+      (3.026/4.952 đơn). Dữ liệu Phường/Xã chỉ phủ ~56% số đơn của Đại lý.
+    </p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 20 Phường/Xã có nhiều Đại lý nhất</h3>
+        <div class="chart-box-tall"><canvas id="chartDealerCount"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>Phường Hòa Xuân</b> tập trung nhiều đại lý nhất, với 30 đại lý.
+        </p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 20 Phường/Xã có Đại lý bán tốt nhất</h3>
+        <div class="chart-box-tall"><canvas id="chartDealerRevenue"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>Phường Hòa Xuân</b> có đại lý bán tốt nhất, đạt 1,20 tỷ đ — đây cũng là khu vực có
+          nhiều đại lý nhất, cho thấy mật độ đại lý cao đi kèm doanh số cao.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KHÁCH HÀNG QUAY LẠI ===================== -->
+  <section id="quay-lai">
+    <h2 class="text-2xl font-bold text-slate-900 mb-1">5. Khách hàng quay lại (Repeat Customers)</h2>
+    <p class="text-slate-500 mb-6">
+      Vì Sale Order không lưu Mã khách hàng, tên khách hàng được trích từ văn bản tự do ở cột "Diễn giải"
+      (phủ 94.7% số đơn) — đây là ước lượng gần đúng, không phải khóa định danh chính xác.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Khách nhận diện được</p>
+        <p class="text-xl font-bold text-slate-900">1.272</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Khách quay lại (≥2 đơn)</p>
+        <p class="text-xl font-bold text-emerald-600">678 (53.3%)</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Doanh số từ khách quay lại</p>
+        <p class="text-xl font-bold text-emerald-600">81.9%</p>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+        <p class="text-xs text-slate-400 font-semibold">Quay lại không phải Đại lý</p>
+        <p class="text-xl font-bold text-slate-900">305 (45.0%)</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Tỷ lệ khách theo số lần mua &amp; đóng góp doanh số</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="chart-box"><canvas id="chartRepeatCount"></canvas></div>
+          <div class="chart-box"><canvas id="chartRepeatRevenue"></canvas></div>
+        </div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> Chỉ <b>53.3%</b> khách hàng quay lại (≥2 đơn) nhưng lại tạo ra tới
+          <b>81.9%</b> tổng doanh số — nhóm khách trung thành có giá trị rất lớn.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Phân phối số lần mua hàng theo khách hàng</h3>
+        <div class="chart-box"><canvas id="chartOrderHist"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> Phần lớn khách hàng chỉ mua 1 lần; số khách mua từ 6 lần trở lên là nhóm nhỏ nhưng đáng để chăm sóc đặc biệt.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 15 khách hàng theo doanh số</h3>
+        <div class="chart-box-tall"><canvas id="chartTopKh"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>KDVP HẢI PHÒNG - VŨ MAI ANH (KHÁCH SỈ PCU) -</b> là khách hàng đóng góp doanh số cao nhất (5,76 tỷ đ).
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h3 class="font-semibold text-slate-800 mb-3">Top 15 khách quay lại KHÔNG phải Đại lý</h3>
+        <div class="chart-box-tall"><canvas id="chartTopNonDealer"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> <b>KDVP HẢI PHÒNG - VŨ MAI ANH (KHÁCH SỈ PCU) -</b> dẫn đầu nhóm khách quay lại không phải đại lý (5,76 tỷ đ) —
+          nhóm này (305 khách) đóng góp 33,18 tỷ đ.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 lg:col-span-2">
+        <h3 class="font-semibold text-slate-800 mb-3">Tỷ lệ quay lại: Khách lẻ vs Sỉ (Đại lý)</h3>
+        <div class="chart-box"><canvas id="chartLeSiRepeat"></canvas></div>
+        <p class="text-sm text-slate-600 mt-4 leading-relaxed">
+          <b><i><u>Insight:</u></i></b> Sỉ (Đại lý) có tỷ lệ quay lại <b>61.9%</b> (603 khách),
+          cao hơn Khách lẻ <b>48.7%</b> (267 khách) khoảng
+          13.2% — đại lý gắn bó lâu dài hơn khách lẻ.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TÓM TẮT INSIGHT ===================== -->
+  <section id="insight">
+    <h2 class="text-2xl font-bold text-slate-900 mb-1">6. Tóm tắt insight chính</h2>
+    <p class="text-slate-500 mb-6">Những điểm nổi bật nhất rút ra từ toàn bộ phân tích.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-slate-900 text-white rounded-xl p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-1">Quy mô</p>
+        <p class="text-sm leading-relaxed">
+          3.260 khách hàng · 4.952 đơn hàng · tổng doanh số 75,01 tỷ đ.
+          82.9% đơn đã được ghi nhận doanh số chính thức.
+        </p>
+      </div>
+      <div class="bg-slate-900 text-white rounded-xl p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-1">Khu vực &amp; nhân sự</p>
+        <p class="text-sm leading-relaxed">
+          <b>Đà Nẵng</b> dẫn đầu doanh số cấp tỉnh, <b>Phường Hòa Xuân</b> dẫn đầu cấp Phường/Xã.
+          <b>Tạ Công Thức</b> là nhân viên kinh doanh xuất sắc nhất.
+        </p>
+      </div>
+      <div class="bg-slate-900 text-white rounded-xl p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-1">Khách hàng quay lại</p>
+        <p class="text-sm leading-relaxed">
+          53.3% khách hàng quay lại (≥2 đơn) nhưng đóng góp tới 81.9% doanh số.
+          Sỉ/Đại lý quay lại nhiều hơn Khách lẻ (61.9% so với 48.7%).
+        </p>
+      </div>
+      <div class="bg-slate-900 text-white rounded-xl p-5">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold mb-1">Đại lý</p>
+        <p class="text-sm leading-relaxed">
+          Đại lý chiếm 61.1% tổng số đơn hàng.
+          <b>Phường Hòa Xuân</b> vừa nhiều đại lý nhất vừa có doanh số đại lý cao nhất — khu vực trọng điểm cần duy trì đầu tư.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center text-xs text-slate-400 pt-8 pb-4 border-t border-slate-200">
+    Báo cáo từ dữ liệu CRM · Nguồn: CRM_Account_02.07.2026_10.44.30_920.xlsx &amp; CRM_Saleorder_02.07.2026_10.40.58_376.xlsx
+  </footer>
+</main>
+
+<script>
+const DATA = {"overview": {"tong_kh": 3260, "tong_don": 4952, "tong_don_zero": 446, "tong_doanh_so": 75007945462.0, "ty_le_da_ghi": 82.93618739903069}, "customer": {"dist_loai": {"labels": ["(Không xác định)", "KDL", "Khách hàng bán lẻ", "KLPKD", "DV", "KDA", "KDA, Khách hàng dự án", "Khách hàng dự án", "CUQT", "MH", "Khách hàng dự án, KDA", "Khách hàng dự án, MHTN", "MHTN", "KSPKD"], "values": [2115, 714, 234, 56, 32, 32, 25, 21, 21, 5, 2, 1, 1, 1]}, "le_si": {"labels": ["Khác / Không xác định", "Sỉ (Đại lý)", "Khách lẻ"], "values": [1793, 970, 497]}, "top_linh_vuc": {"labels": ["(Không xác định)", "Đại lý", "Khách lẻ", "Nhà thầu", "Chủ đầu tư", "Tư vấn thiết kế", "Chủ dự án", "Khách lẻ,  Chủ đầu tư", "Tư vấn thiết kế,  Nhà thầu", "Chủ đầu tư, Nhà thầu"], "values": [2179, 729, 186, 58, 55, 28, 12, 3, 2, 2]}, "top_tinh_kh": {"labels": ["Đà Nẵng", "Quảng Nam", "Hồ Chí Minh", "Hà Nội", "Lâm Đồng", "Gia Lai", "Quảng Ngãi", "Đắk Lắk", "Nghệ An", "Cần Thơ", "Hải Phòng", "Hưng Yên", "Thanh Hóa", "Quảng Trị", "Bắc Ninh"], "values": [625, 134, 109, 68, 27, 17, 16, 15, 14, 13, 13, 11, 11, 10, 10]}, "top_owner": {"labels": ["Nguyễn Quốc Dũng", "Phan Thị Thanh Ty", "Nguyễn Thị Thanh Tường", "Nguyễn Văn Vũ", "Tạ Công Thức", "Đặng Thị Anh Đào", "Lê Từ Thị Chi Na", "Nguyễn Thị Lan Huệ", "Nguyễn Trung Nguyên", "Nguyễn Thị Linh Nguyệt", "Bành Quang Khánh", "Lê Thanh Phong", "Ngô Trường Sa", "Trần Hồng Loan", "Mai Đình Quang"], "values": [228, 100, 100, 88, 80, 78, 77, 63, 63, 63, 60, 54, 54, 53, 51]}}, "order": {"describe": {"count": 4506.0, "mean": 16646237.341766534, "std": 71139821.27469023, "min": 17500.0, "25%": 1547204.0, "50%": 4036600.0, "75%": 11760000.0, "max": 2593626930.0}, "monthly": {"labels": ["2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07"], "so_don": [163, 89, 59, 79, 79, 70, 10, 46, 33, 37, 74, 124, 123, 99, 133, 128, 120, 81, 42, 89, 99, 146, 140, 172, 210, 286, 220, 205, 301, 315, 91, 192, 138, 124, 178, 11], "doanh_so": [7158530071.0, 1117388209.0, 1041988443.0, 1050437323.0, 1700892416.0, 1149232915.0, 892583947.0, 2531293726.0, 366347841.0, 1899231305.0, 1546357377.0, 1419527264.0, 1399105737.0, 1321746017.0, 1639340741.0, 1720290498.0, 671988565.0, 326198357.0, 406255141.0, 659822200.0, 667715769.0, 1338666397.0, 1542647792.0, 2076729512.0, 2004937498.0, 2795215112.0, 2493030935.0, 2962386105.0, 4914844236.0, 7362176422.0, 2000016889.0, 3974185653.0, 1902942473.0, 2322734760.0, 4011379364.0, 2619778452.0]}, "tinh_trang_ghi": {"labels": ["Đã ghi", "Đề nghị ghi", "Từ chối ghi", "Bản nháp"], "values": [4107, 537, 175, 133]}, "tinh_trang_giao": {"labels": ["Đã giao hàng", "Chưa giao hàng", "Đang giao hàng", "(Trống)"], "values": [3415, 821, 547, 169]}, "tinh_trang_thanh_toan": {"labels": ["Chưa thanh toán", "Đã thanh toán", "Đã thanh toán một phần"], "values": [3933, 807, 212]}, "top_dvi": {"labels": ["PKD nhà máy Viet Huong", "BP ĐẠI LÝ", "SHOWROOM  246 NHT", "BP KD Sỉ", "BP DỰ ÁN", "BP THI TRƯỜNG", "PHÒNG KINH DOANH", "PHÒNG KINH DOANH HCM", "PHÒNG KẾ TOÁN ĐN", "Showroom 999 Nguyễn Hữu Thọ", "SHOWROOM TAM KỲ", "BAN GIÁM ĐỐC"], "so_don": [1885, 1453, 539, 26, 151, 168, 169, 276, 51, 87, 30, 26], "doanh_so": [16858937277.0, 15361203943.0, 9372695177.0, 8792608064.0, 7595792753.0, 4603789231.0, 3583618019.0, 2932307123.0, 2259719427.0, 1678893406.0, 630624933.0, 574158183.0]}, "top_nv": {"labels": ["Tạ Công Thức", "Nguyễn Trung Nguyên", "Ngô Trường Sa", "Nguyễn Quốc Dũng", "Châu Thị Kiều Oanh", "Phan Thị Thanh Ty", "Đặng Thị Anh Đào", "Phan Vũ Trâm Anh", "Bành Quang Khánh", "Hoàng Minh Thành", "Nguyễn Thị Lan Huệ", "Tưởng Thị Mỹ Diệu (DIEU)", "Nguyễn Thị Thanh Tường", "Dương Thị Ngọc Ánh", "Hồ Xuân Thông"], "doanh_so": [8770892758.0, 7924724233.0, 7165221321.0, 5882896318.0, 5107518930.0, 4987612422.0, 3935431589.0, 3779076090.0, 3042459762.0, 2621993620.0, 2515665600.0, 2261063627.0, 1683772094.0, 1431910268.0, 1162372624.0]}, "top_tinh_so": {"labels": ["Đà Nẵng", "Quảng Nam", "Hồ Chí Minh", "Thừa Thiên Huế", "Nghệ An", "Kon Tum", "Hải Phòng", "Quảng Trị", "Hưng Yên", "Quảng Ngãi", "Bình Định", "Lâm Đồng", "Ninh Bình", "Huế", "Hà Nội"], "values": [14916934475, 5177944562, 3075597468, 1077685361, 911629612, 869666030, 660488912, 583802854, 499763178, 365319920, 193040688, 176524838, 168000000, 156536287, 150431450]}, "top_xa": {"labels": ["Phường Hòa Xuân", "Phường 8", "Phường Ngũ Hành Sơn", "Xã Vinh Quang", "Phường Hải Châu", "Phường An Khê", "Xã Duy Trinh", "Phường Hòa An", "Phường Thạnh Lộc", "Phường Sài Gòn", "Xã Phú Diên", "Xã Nguyễn Văn Linh", "Xã Nghi Kim", "Thị trấn Núi Thành", "Phường Đồng Hới", "Phường Hòa Khánh", "Phường Khuê Trung", "- Không chọn -", "Xã Hòa Ninh", "Phường Thanh Khê"], "values": [2201760770, 1349843616, 972160974, 859652310, 797421808, 705500480, 613298541, 548285496, 516298353, 428866850, 427948800, 427508928, 358540800, 355300008, 353393774, 287723407, 285932201, 277029672, 269816218, 267997000]}}, "dealer": {"so_dai_ly": 3026, "tong_don": 4952, "top_xa_so_luong": {"labels": ["Phường Hòa Xuân", "Phường Ngũ Hành Sơn", "Phường Hòa Khánh", "Thị trấn Nam Phước", "Xã Duy Xuyên", "Phường Hòa An", "Xã Đại Lộc", "Xã Nam Phước", "Phường Hòa Minh", "Phường An Khê", "Xã Thu Bồn", "Phường Thanh Khê", "Phường Hòa Hiệp Nam", "Phường Hòa Hải", "Xã Duy Hòa", "Thị trấn Ái Nghĩa", "Xã Quế Sơn", "Phường Hội An Tây", "Phường Hải Vân", "Phường Điện Bàn Đông"], "values": [30, 14, 12, 11, 10, 9, 8, 7, 7, 7, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5]}, "top_xa_doanh_so": {"labels": ["Phường Hòa Xuân", "Phường Ngũ Hành Sơn", "Xã Vinh Quang", "Phường An Khê", "Xã Duy Trinh", "Xã Phú Diên", "Phường Đồng Hới", "Phường Hòa Khánh", "- Không chọn -", "Phường Thanh Khê", "Phường Hội An Tây", "Phường Hòa An", "Xã Thu Bồn", "Phường Phước Mỹ", "Xã Duy Xuyên", "Xã Đại Thắng", "Xã Hòa Nhơn", "Phường Mân Thái", "Phường Vĩnh Điện", "Xã Nam Phước"], "values": [1203859156, 888056530, 859652310, 692772480, 469123200, 427948800, 353393774, 287723407, 277029672, 267997000, 246986017, 217078134, 195660620, 185793024, 178771010, 161864160, 157838400, 149091130, 133175280, 131117600]}}, "repeat": {"so_nhan_dien": 4688, "tong_don": 4952, "tong_kh_nhandien": 1272, "so_kh_quay_lai": 678, "ty_le_quay_lai": 0.5330188679245284, "doanh_so_quay_lai_pct": 0.8188606519116334, "order_count_hist": {"labels": ["1", "2", "3", "4", "5", "6+"], "values": [594, 215, 114, 86, 53, 210]}, "top_kh": {"labels": ["KDVP HẢI PHÒNG - VŨ MAI ANH (KHÁCH SỈ PCU) -", "KDA AA TÂY NINH", "Bim", "CTY INMAT", "CÔNG TY CỔ PHẦN NỘI THẤT NEM -0305901922", "Đại Lí Chín Khương", "Đại Lí Trí Hải", "Nem Oanh sĩ)", "Đại lý Thủy", "Dl TƯƠNG GIAO", "Công ty TNHH MTV Hùng Điên Dương", "Đl. VŨ MAI ANH", "KDA ACON", "Đại lí LTM", "CT MINH HUYỀN TRANG"], "doanh_so": [5764350770.0, 2147109120.0, 1762486031.0, 1085385280.0, 1004301504.0, 975664410.0, 885838632.0, 802312128.0, 741011712.0, 697910960.0, 670000000.0, 660488912.0, 641401740.0, 575659203.0, 548467524.0], "so_don": [6, 1, 6, 3, 4, 82, 42, 2, 66, 10, 1, 15, 4, 79, 2]}, "non_dealer_repeat_count": 305, "non_dealer_repeat_pct": 0.4498525073746313, "non_dealer_doanh_so": 33183766923.0, "top_non_dealer": {"labels": ["KDVP HẢI PHÒNG - VŨ MAI ANH (KHÁCH SỈ PCU) -", "Bim", "CTY INMAT", "CÔNG TY CỔ PHẦN NỘI THẤT NEM -0305901922", "Nem Oanh sĩ)", "KDA ACON", "CT MINH HUYỀN TRANG", "CÔNG TY TNHH ĐẦU TƯ XÂY DỰNG DỊCH VỤ HDCONS", "KL Anh Huy", "TNHH Đông Lai", "Công Ty cổ phần xây lắp và vật tư xây Dựng", "Công ty TNHH MINH HUYỀN TRANG", "KL CHỊ THUÝ HÀ", "KL - Anh Hoàng", "CTY TUNA BIM"], "doanh_so": [5764350770.0, 1762486031.0, 1085385280.0, 1004301504.0, 802312128.0, 641401740.0, 548467524.0, 463661460.0, 440054403.0, 438171600.0, 428866850.0, 392918170.0, 370766431.0, 358540800.0, 357548220.0]}, "kl_count": 267, "kl_repeat_pct": 0.4868913857677903, "si_count": 603, "si_repeat_pct": 0.6185737976782753}, "meta": {"account_file": "CRM_Account_02.07.2026_10.44.30_920.xlsx", "saleorder_file": "CRM_Saleorder_02.07.2026_10.40.58_376.xlsx"}};
+
+const VND = new Intl.NumberFormat('vi-VN');
+function fmtVND(v) {
+  if (v >= 1e9) return (v/1e9).toLocaleString('vi-VN', {maximumFractionDigits:2}) + ' tỷ đ';
+  if (v >= 1e6) return (v/1e6).toLocaleString('vi-VN', {maximumFractionDigits:0}) + ' tr đ';
+  return VND.format(v) + ' đ';
+}
+
+Chart.defaults.font.family = "'Segoe UI', Inter, sans-serif";
+Chart.defaults.color = '#475569';
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+
+const PALETTE = ['#6366f1','#22c55e','#f59e0b','#ef4444','#06b6d4','#a855f7','#ec4899','#84cc16','#0ea5e9','#f97316'];
+
+function barChart(id, labels, values, opts={}) {
+  const horizontal = opts.horizontal ?? true;
+  return new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: opts.label || 'Giá trị',
+        data: values,
+        backgroundColor: opts.color || '#6366f1',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: horizontal ? 'y' : 'x',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => opts.isMoney ? fmtVND(ctx.parsed.x ?? ctx.parsed.y) : (ctx.parsed.x ?? ctx.parsed.y).toLocaleString('vi-VN') } }
+      },
+      scales: {
+        x: { ticks: { callback: (v) => opts.isMoney ? fmtVND(v) : v } },
+      }
+    }
+  });
+}
+
+function pieChart(id, labels, values, opts={}) {
+  return new Chart(document.getElementById(id), {
+    type: opts.doughnut ? 'doughnut' : 'pie',
+    data: { labels, datasets: [{ data: values, backgroundColor: PALETTE }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 10 } } },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed.toLocaleString('vi-VN')}` } }
+      }
+    }
+  });
+}
+
+// ---- Khách hàng ----
+barChart('chartDistLoai', DATA.customer.dist_loai.labels, DATA.customer.dist_loai.values, { color: '#6366f1' });
+pieChart('chartLeSi', DATA.customer.le_si.labels, DATA.customer.le_si.values, { doughnut: true });
+barChart('chartLinhVuc', DATA.customer.top_linh_vuc.labels, DATA.customer.top_linh_vuc.values, { color: '#22c55e' });
+barChart('chartTinhKh', DATA.customer.top_tinh_kh.labels, DATA.customer.top_tinh_kh.values, { color: '#06b6d4' });
+barChart('chartOwner', DATA.customer.top_owner.labels, DATA.customer.top_owner.values, { color: '#f59e0b' });
+
+// ---- Đơn hàng ----
+new Chart(document.getElementById('chartMonthly'), {
+  data: {
+    labels: DATA.order.monthly.labels,
+    datasets: [
+      { type: 'bar', label: 'Doanh số', data: DATA.order.monthly.doanh_so, backgroundColor: '#6366f199', yAxisID: 'y', borderRadius: 4 },
+      { type: 'line', label: 'Số đơn', data: DATA.order.monthly.so_don, borderColor: '#ef4444', yAxisID: 'y1', tension: 0.3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      tooltip: { callbacks: { label: (ctx) => ctx.dataset.label === 'Doanh số' ? 'Doanh số: ' + fmtVND(ctx.parsed.y) : 'Số đơn: ' + ctx.parsed.y } }
+    },
+    scales: {
+      y: { position: 'left', ticks: { callback: (v) => fmtVND(v) } },
+      y1: { position: 'right', grid: { drawOnChartArea: false } },
+      x: { ticks: { maxRotation: 60, minRotation: 60 } }
+    }
+  }
+});
+
+pieChart('chartGhi', DATA.order.tinh_trang_ghi.labels, DATA.order.tinh_trang_ghi.values, { doughnut: true });
+pieChart('chartGiao', DATA.order.tinh_trang_giao.labels, DATA.order.tinh_trang_giao.values, { doughnut: true });
+pieChart('chartThanhToan', DATA.order.tinh_trang_thanh_toan.labels, DATA.order.tinh_trang_thanh_toan.values, { doughnut: true });
+
+barChart('chartDviDoanhSo', DATA.order.top_dvi.labels, DATA.order.top_dvi.doanh_so, { color: '#f97316', isMoney: true });
+barChart('chartNvDoanhSo', DATA.order.top_nv.labels, DATA.order.top_nv.doanh_so, { color: '#ec4899', isMoney: true });
+barChart('chartTinhSo', DATA.order.top_tinh_so.labels, DATA.order.top_tinh_so.values, { color: '#06b6d4', isMoney: true });
+barChart('chartXaSo', DATA.order.top_xa.labels, DATA.order.top_xa.values, { color: '#0ea5e9', isMoney: true });
+
+// ---- Đại lý ----
+barChart('chartDealerCount', DATA.dealer.top_xa_so_luong.labels, DATA.dealer.top_xa_so_luong.values, { color: '#a855f7' });
+barChart('chartDealerRevenue', DATA.dealer.top_xa_doanh_so.labels, DATA.dealer.top_xa_doanh_so.values, { color: '#f43f5e', isMoney: true });
+
+// ---- Khách hàng quay lại ----
+pieChart('chartRepeatCount', ['Quay lại (≥2 đơn)', 'Mua 1 lần'], [DATA.repeat.so_kh_quay_lai, DATA.repeat.tong_kh_nhandien - DATA.repeat.so_kh_quay_lai], { doughnut: true });
+pieChart('chartRepeatRevenue', ['DS từ khách quay lại', 'DS từ khách mua 1 lần'], [DATA.repeat.doanh_so_quay_lai_pct, 1 - DATA.repeat.doanh_so_quay_lai_pct], { doughnut: true });
+barChart('chartOrderHist', DATA.repeat.order_count_hist.labels, DATA.repeat.order_count_hist.values, { color: '#22c55e', horizontal: false });
+barChart('chartTopKh', DATA.repeat.top_kh.labels, DATA.repeat.top_kh.doanh_so, { color: '#6366f1', isMoney: true });
+barChart('chartTopNonDealer', DATA.repeat.top_non_dealer.labels, DATA.repeat.top_non_dealer.doanh_so, { color: '#84cc16', isMoney: true });
+barChart('chartLeSiRepeat', ['Khách lẻ', 'Sỉ (Đại lý)'], [DATA.repeat.kl_repeat_pct, DATA.repeat.si_repeat_pct], { color: '#f59e0b', horizontal: false });
+
+// smooth scroll + active nav highlight
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
